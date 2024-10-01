@@ -166,8 +166,8 @@ function updateStunGraph() {
         'x0': stunXArray[i], 'y0': lagStunYArray[i],
         'x1': stunXArray[i] + 1, 'y1': lagStunYArray[i] + 1,
       })
-    }*/
-  }
+    }
+  }*/
 
   for (let i = 0; i < pauses.length; i++) {
     stunGraph.push({
