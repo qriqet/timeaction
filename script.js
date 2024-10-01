@@ -10,19 +10,18 @@ function timeActiveIterator(start = 0, end = stop, timeRateEvents = {}, pauseFra
 
   const rangeIterator = {
     next() {
+      if (iterationCount in timeRateEvents) {
+        timeRate = timeRateEvents[iterationCount];
+        deltaTime = Math.fround(Math.fround(0.0166667) * timeRate);
+      }
       if (iterationCount == 0) {
         iterationCount++;
         return { value: [timeActive,deltaTime], done: false };
       }
-      if (iterationCount in timeRateEvents) {
-        timeRate = timeRateEvents[iterationCount];
-      }
       if (sqs.includes(iterationCount)) {
         timeActive = 0;
       } else {
-        deltaTime = -timeActive;
-        timeActive = Math.fround(timeActive + Math.fround(Math.fround(0.0166667) * timeRate));
-        deltaTime += timeActive;
+        timeActive = Math.fround(timeActive + Math.fround(deltaTime));
       }
       if (iterationCount < end) {
         if (pauseFrames.includes(iterationCount) && pauseIterCount < 10) {
@@ -87,7 +86,10 @@ let stunXArray;
 let stunYArray;
 let dtArray;
 
-let stunData;
+let stunData = [{
+  mode: "markers",
+  type: "scatter"
+}];;
 
 let stunLayout = {
   xaxis: { autorange: true, title: "Frames since stun start" },
@@ -108,13 +110,8 @@ function updateStunGraph() {
   stunXArray = Array.from(Array(stunStop).keys(), (x) => x);
   stunYArray = Array.from(timeActiveIterator(stunStart, stunStop, stunTREvents, pauses), (x) => x[0] * 60 % 3);
   dtArray = Array.from(timeActiveIterator(stunStart, stunStop, stunTREvents, pauses), (x) => x[1] * 60);
-  stunData = [{
-    x: stunXArray,
-    y: stunYArray,
-    mode: "markers",
-    type: "scatter"
-  }];
-
+  stunData["x"] = stunXArray;
+  stunData["y"] = stunYArray;
   pauses.sort(function(a, b) {
     return a - b;
   });
