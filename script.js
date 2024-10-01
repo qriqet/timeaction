@@ -99,15 +99,15 @@ let stunLayout = {
 let spinnerGroup = 1.8916962147;
 let badelineThrow = { 1: 0.75, 10: 0.7619, 11: 0.7738, 12: 0.7857, 13: 0.7976, 14: 0.8095, 15: 0.8214, 16: 0.8333, 17: 0.8452, 18: 0.8571, 19: 0.8690, 20: 0.8810, 21: 0.8929, 22: 0.9048, 23: 0.9167, 24: 0.9286, 25: 0.9405, 26: 0.9524, 27: 0.9643, 28: 0.9762, 29: 0.9881, 30: 1 };
 let inFiltration = {1:0.4};
-let trEvents = {};
-trEvents = inFiltration;
+let stunTREvents = {};
+stunTREvents = inFiltration;
 pauses = [1, 2, 5, 6, 9, 10, 13, 14, 17, 18, 21, 22, 25, 26, 29, 30];
-pauses = []
+pauses = [];
 
 function updateStunGraph() {
   stunXArray = Array.from(Array(stunStop).keys(), (x) => x);
-  stunYArray = Array.from(timeActiveIterator(stunStart, stunStop, inFiltration, pauses), (x) => x[0] * 60 % 3);
-  dtArray = Array.from(timeActiveIterator(stunStart, stunStop, inFiltration, pauses), (x) => x[1] * 60);
+  stunYArray = Array.from(timeActiveIterator(stunStart, stunStop, stunTREvents, pauses), (x) => x[0] * 60 % 3);
+  dtArray = Array.from(timeActiveIterator(stunStart, stunStop, stunTREvents, pauses), (x) => x[1] * 60);
   stunData = [{
     x: stunXArray,
     y: stunYArray,
