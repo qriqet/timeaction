@@ -4,6 +4,7 @@ window.onerror=function(msg, url, linenumber){
  return true
 }
 
+
 let start = 0;
 let stop = 2047 * 60;
 let saveAndQuits = [];
