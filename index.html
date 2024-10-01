@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+  <div id="mod1"></div>
+  <!--<button onclick="update();">Update</button><br>-->
+  <button id="addStun" onclick="showStunOptions();">Add stun</button>
+  <button id="adds+q" onclick="showSaveAndQuitOptions();">Add s+q</button><br>
+  <div id="stunOptions" style="display: none;"><label>Start Time </label><input id="startTimeInput"><br>
+  <label>Stop Time </label><input id="stopTimeInput" autocomplete="off"><br>
+  <label>Min Spinner Group </label><input id="minGroupInput" autocomplete="off"><br>
+  <label>Max Spinner Group </label><input id="maxGroupInput" autocomplete="off"><br>
+  <button onclick="hideOptions();">Nevermind</button></div>
+  <div id="s+qOptions" style="display: none;">
+    <label>Time </label><input id="timeInput"><br>
+    <button onclick="hideOptions();">Nevermind</button></div>
+  <div id="stun" style="display: block; height: 500px;"></div>
+  <label>Time </label><input id="pauseTimeInput" autocomplete="off"><button onclick="addPause();">Add/remove pause</button><br>
+  <label>Starting TimeActive </label><input id="startTimeActiveInput" autocomplete="off"><button id="setTimeActive" onclick="setTimeActive();">Set</button><br>
+  <label>Spinner Offset </label><input id="spinnerGroupInput" autocomplete="off"><button onclick="setSpinnerGroup();">Set</button><br>
+  <!--<input type="range" min="0" max="3" step = "0.001" value="0" class="slider" id="spinnerGroupSlider"><label id="groupOutput">0</label><button onclick="setTimeActive();">Set</button><br>-->
+  <br><br><br><br>
+
+
+  <script src="script.js"></script>
+</body>
+
+</html>
