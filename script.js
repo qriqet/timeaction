@@ -1,3 +1,9 @@
+//debug
+window.onerror=function(msg, url, linenumber){
+ alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber)
+ return true
+}
+
 let start = 0;
 let stop = 2047 * 60;
 let saveAndQuits = [];
