@@ -77,7 +77,7 @@ let layout = {
 };
 
 // Display using Plotly
-Plotly.newPlot("mod1", data, layout, { modeBarButtonsToRemove: ["zoom2d", "autoscale"], scrollZoom: true, displaylogo: false, responsive: true });0.2, 1.06, 1.79)
+Plotly.newPlot("mod1", data, layout, { modeBarButtonsToRemove: ["zoom2d", "autoscale"], scrollZoom: true, displaylogo: false, responsive: true });
 
 let pauses = [];
 let stunStart = 0;
