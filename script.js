@@ -6,23 +6,23 @@ function timeActiveIterator(start = 0, end = stop, timeRateEvents = {}, pauseFra
   let pauseIterCount = 0;
   let timeActive = start;
   let timeRate = 1;
+  let deltaTime = 0;
 
   const rangeIterator = {
     next() {
       if (iterationCount == 0) {
         iterationCount++;
-        return { value: timeActive, done: false };
+        return { value: [timeActive,deltaTime], done: false };
       }
       if (iterationCount in timeRateEvents) {
-        timeRate = timeRateEvents[iterationCount]
+        timeRate = timeRateEvents[iterationCount];
       }
       if (sqs.includes(iterationCount)) {
         timeActive = 0;
-        /*for (let i = 0; i < 36; i++) {
-          timeActive = Math.fround(timeActive + Math.fround(Math.fround(0.0166667) * timeRate));
-        }*/
       } else {
+        deltaTime = -timeActive;
         timeActive = Math.fround(timeActive + Math.fround(Math.fround(0.0166667) * timeRate));
+        deltaTime += timeActive;
       }
       if (iterationCount < end) {
         if (pauseFrames.includes(iterationCount) && pauseIterCount < 10) {
@@ -31,9 +31,9 @@ function timeActiveIterator(start = 0, end = stop, timeRateEvents = {}, pauseFra
           pauseIterCount = 0;
           iterationCount++;
         }
-        return { value: timeActive, done: false };
+        return { value: [timeActive,deltaTime], done: false };
       }
-      return { value: timeActive, done: true };
+      return { value: [timeActive,deltaTime], done: true };
     },
     [Symbol.iterator]() {
       return this;
@@ -57,7 +57,7 @@ summit = {
 summit = {}
 
 let xArray = Array.from(Array(stop).keys(), (x) => x / 60);
-let yArray = Array.from(timeActiveIterator(0, stop, summit), (x) => x * 60 % 1);
+let yArray = Array.from(timeActiveIterator(0, stop, summit), (x) => x[1] * 60 % 1);
 
 // Define Data
 let data = [{
@@ -77,46 +77,10 @@ let layout = {
 };
 
 // Display using Plotly
-Plotly.newPlot("mod1", data, layout, { modeBarButtonsToRemove: ["zoom2d", "autoscale"], scrollZoom: true, displaylogo: false, responsive: true });
+Plotly.newPlot("mod1", data, layout, { modeBarButtonsToRemove: ["zoom2d", "autoscale"], scrollZoom: true, displaylogo: false, responsive: true });0.2, 1.06, 1.79)
 
-/*addStun(236.4, 252.0, 1.45, 1.64)
-addStun(305.73, 315.7, 2.14, 2.42)
-addStun(368.22, 376.6, 1.56, 1.82)
-addStun(548.3, 553.1, 2.75, 2.75)
-addStun(590.7, 601.32, 0.78, 1.27)
-addStun(603.3, 610.3, 2.78, 2.94)
-addStun(686.7, 687.9, 0.78, 0.92)
-addStun(687.9, 690.9, 0.52, 0.92)
-addStun(690.9, 700.5, 0.5, 0.92)
-addStun(700.5, 704.1, 0.5, 0.97)
-addStun(704.1, 707.5, 0.66, 0.97)
-addStun(707.5, 707.9, 0.39, 0.97)
-addStun(707.9, 715.3, 0.39, 1.11)
-addStun(715.3, 717.3, 0.39, 1.21)
-addStun(717.3, 727.9, 0.53, 1.21)
-addStun(756.4, 760.2, 1.06, 1.79)
-addStun(760.2, 782.4, 1.02, 1.79)
-addStun(791.3, 809.8, 2.31, 2.65)
-addStun(810.1, 824.9, 1.03, 1.48)
-addStun(866.5, 875.5, 0.17, 0.29)
-addStun(877.4, 887, 1.73, 2.34)*/
-/*let offset = 60
-addStun(27.4+58.5+offset, 35.4+58.5+offset, 0.86, 1.08)
-addStun(98+offset, 104.2+offset, 0.46, 1.24)
-addStun(98+offset, 104.2+offset, 0.8, 1.60)
-addStun(104.2+offset, 120.6+offset, 0.8, 1.24)
-addStun(120.6+offset, 130+offset, 1.24, 1.67)
-addStun(137.6+offset, 141+offset, 0.63, 1.11)*/
-addStun(180, 188.4, 0.8, 1.21)
-addStun(200, 205, 0.83, 1.64)
-
-
-let pauses = [2, 4, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 24, 27, 29, 31];
-//pauses = [1, 2, 5, 6, 9, 10, 13, 14, 17]
-let stunStart = 63.9982782702;
-stunStart = 1024.1507;
-stunStart = 262145;
-stunStart = 0;
+let pauses = [];
+let stunStart = 0;
 let stunStop = 33;
 let stunGraph = [];
 let stunXArray;
@@ -140,7 +104,8 @@ pauses = []
 
 function updateStunGraph() {
   stunXArray = Array.from(Array(stunStop).keys(), (x) => x);
-  stunYArray = Array.from(timeActiveIterator(stunStart, stunStop, badelineThrow, pauses), (x) => x * 60 % 3);
+  stunYArray = Array.from(timeActiveIterator(stunStart, stunStop, badelineThrow, pauses), (x) => x[0] * 60 % 3);
+  dtArray = Array.from(timeActiveIterator(stunStart, stunStop, badelineThrow, pauses), (x) => x[1] * 60);
   stunData = [{
     x: stunXArray,
     y: stunYArray,
@@ -148,41 +113,41 @@ function updateStunGraph() {
     type: "scatter"
   }];
 
-  lagStunYArray = structuredClone(stunYArray);
-  lagStunYArray.unshift(0);
+  //lagStunYArray = structuredClone(stunYArray);
+  //lagStunYArray.unshift(0);
 
   pauses.sort(function(a, b) {
     return a - b;
   });
   for (let i = 0; i < pauses.length; i++) {
     stunYArray.splice(pauses[i], 10);
-    lagStunYArray.splice(pauses[i], 10);
+    dtArray.splice(pauses[i], 10);
+    //lagStunYArray.splice(pauses[i], 10);
   }
   stunGraph = [];
   // Define Data
   for (let i = 0; i < stunXArray.length; i++) {
-    if (stunYArray[i] > 2) {
+    if (stunYArray[i] > 3 - dtArray[i]) {
       stunGraph.push({
         'type': 'rect', xref: "x", yref: "y", layer: "between", fillcolor: "red", 'line': { 'width': 0, },
         'x0': stunXArray[i], 'y0': stunYArray[i],
         'x1': stunXArray[i] + 1, 'y1': 3,
-
       });
       stunGraph.push({
         'type': 'rect', xref: "x", yref: "y", layer: "between", fillcolor: "red", 'line': { 'width': 0, },
         'x0': stunXArray[i], 'y0': 0,
-        'x1': stunXArray[i] + 1, 'y1': stunYArray[i] - 2,
+        'x1': stunXArray[i] + 1, 'y1': (stunYArray[i] + dtArray[i]) % 3,
       })
     } else {
       stunGraph.push({
         'type': 'rect', xref: "x", yref: "y", layer: "between", fillcolor: "red", 'line': { 'width': 0, },
         'x0': stunXArray[i], 'y0': stunYArray[i],
-        'x1': stunXArray[i] + 1, 'y1': stunYArray[i] + 1,
+        'x1': stunXArray[i] + 1, 'y1': stunYArray[i] + dtArray[i],
       })
     }
   }
 
-  for (let i = 0; i < stunXArray.length - 1; i++) {
+  /*for (let i = 0; i < stunXArray.length - 1; i++) {
     if (lagStunYArray[i] > 2) {
       stunGraph.push({
         'type': 'rect', xref: "x", yref: "y", layer: "between", fillcolor: "green", opacity: 0.4, 'line': { 'width': 0, },
@@ -201,7 +166,7 @@ function updateStunGraph() {
         'x0': stunXArray[i], 'y0': lagStunYArray[i],
         'x1': stunXArray[i] + 1, 'y1': lagStunYArray[i] + 1,
       })
-    }
+    }*/
   }
 
   for (let i = 0; i < pauses.length; i++) {
@@ -287,7 +252,7 @@ function addSaveAndQuit() {
   });
   saveAndQuits = [time];
   console.log(yArray)
-  yArray = Array.from(timeActiveIterator(0, stop, {}, [], saveAndQuits), (x) => x * 60 % 1);
+  yArray = Array.from(timeActiveIterator(0, stop, {}, [], saveAndQuits), (x) => x[1] * 60 % 1);
   console.log(yArray)
   data = [{
     x: xArray,
